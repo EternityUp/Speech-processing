@@ -29,7 +29,7 @@ ff= [zeros(1,delay+1) 4];        % Simple feedforward path
 plot(un);
 title('Original signal');
 grid on;
-sound(un);pause;
+% sound(un);pause;
 
 noise=0.01*randn(size(un));      % Noisy signal
 dn = (un+noise)';                % Speech corrupted with noise
@@ -73,10 +73,12 @@ legend('Error of LMS');
 grid on;
 xlabel('Iterations'); ylabel('Error');
 title('Speech signals derived from the LMS algorithms');
-disp('Feedback speech...'); sound(y',fs); pause;
+disp('Feedback speech...'); 
+% sound(y',fs); pause;
 
 
-disp('Error signal from the LMS...'); sound(enlms,fs);  pause;
+disp('Error signal from the LMS...'); 
+% sound(enlms,fs);  pause;
 %audiowrite('far_howling_suppression.wav',enlms,fs);
 %audiowrite('near_howling_suppression.wav',enlms,fs);
 audiowrite('sp_c2e2_howling_suppression.wav',enlms,fs);
@@ -95,7 +97,8 @@ title('Similarity between the original and error signals');
 
 figure;
 plot(ylms'); 
-disp(' Output signal from adaptive filter...'); sound(ylms,fs);  pause;
+disp(' Output signal from adaptive filter...'); 
+% sound(ylms,fs);  pause;
 legend('Output of LMS');
 title('Noise signal derived from the LMS algorithms');
 grid on; xlabel('Iterations'); ylabel('Output signal');
@@ -108,7 +111,7 @@ figure;
 plot(Slms.coeffs,'g','LineWidth',2 );
 hold on;
 plot(fb(1:M,1),'r');
-legend('Final coeffs of LMS','Final coeffs of NLMS','FB coeffs');
+legend('Final coeffs of LMS','FB coeffs');
 grid on;
 xlabel('Coefficient index'); ylabel('Amplitude');
 title('Final coefficients of the LMS algorithms');

@@ -42,7 +42,7 @@ for n = 1:ITER
       u(n) = 0;
    end
   
-   for k = 1:1:M_fb-1;         % Updates of tapped-delay line for feedback plant
+   for k = 1:1:M_fb-1         % Updates of tapped-delay line for feedback plant
        fbtap(M_fb-k+1) = fbtap(M_fb-k);
    end
    fbtap(1) = un(n);              
@@ -54,7 +54,7 @@ for n = 1:ITER
      % u(n) = 0;
   % end
 
-   for k = 1:1:M-1;            % Updates of tapped-delay line of adaptive filter
+   for k = 1:1:M-1            % Updates of tapped-delay line of adaptive filter
        fftap(M-k+1) = fftap(M-k);
    end
    fftap(1) = un(n);

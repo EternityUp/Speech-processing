@@ -27,10 +27,10 @@ ff= [zeros(1,delay+1) 4];        % Simple feedforward path
 
 %[un,fs] = audioread('near.wav');
 [un,fs] = audioread('far.wav');
-plot(un);
-title('Original signal');
-grid on;
-sound(un);pause;
+% plot(un);
+% title('Original signal');
+% grid on;
+% sound(un);pause;
 
 noise=0.01*randn(size(un));      % Noisy signal
 dn = (un+noise)';                % Speech corrupted with noise
@@ -62,8 +62,27 @@ disp(sprintf('Total time = %.3f mins',toc/60));
 
 err_sqrnlms = ennlms.^2;
 
-
-
+figure
+subplot 221
+plot(un)
+legend('original')
+audiowrite('original.wav',un,fs);
+axis tight
+subplot 222
+plot(ynlms)
+legend('filtered output')
+axis tight
+audiowrite('filtered.wav',ynlms,fs);
+subplot 223
+plot(ennlms)
+legend('error output')
+axis tight
+audiowrite('error.wav',ennlms,fs);
+subplot 224
+plot(fbnlms)
+legend('feedback output')
+axis tight
+audiowrite('feedback.wav',fbnlms,fs);
 % Suggestion: Use other algorithms
 
 
@@ -78,9 +97,11 @@ legend('Error of NLMS');
 grid on;
 xlabel('Iterations'); ylabel('Error');
 title('Speech signals derived from the NLMS algorithms');
-disp('Feedback speech...'); sound(y',fs); pause;
+disp('Feedback speech...'); 
+% sound(y',fs); pause;
 
-disp('Error signal from the NLMS...'); sound(ennlms,fs); pause;
+disp('Error signal from the NLMS...'); 
+% sound(ennlms,fs); pause;
 audiowrite('far_howling_suppression.wav',ennlms,fs);
 %audiowrite('near_howling_suppression.wav',ennlms,fs);
 
@@ -98,7 +119,8 @@ title('Similarity between the original and error signals');
 
 figure;
 plot(ynlms'); 
-disp(' Output signal from adaptive filter...'); sound(ynlms,fs);  pause;
+disp(' Output signal from adaptive filter...'); 
+% sound(ynlms,fs);  pause;
 legend('Output of NLMS');
 title('Noise signal derived from the NLMS algorithms');
 grid on; xlabel('Iterations'); ylabel('Output signal');

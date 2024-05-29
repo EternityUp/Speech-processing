@@ -8,7 +8,7 @@ clc
 % x = x(1:fs);
 g = load('path.txt');
 
-K = 0.2;                                % 增益
+K = 0.147;                                % 增益
 
 g = g(:);                               % 反馈声学路径g
 c = [0,0,0,0,1]';                       % 扩音系统内部传递路径c
@@ -19,7 +19,7 @@ xs2 = zeros(size(g));
 y1 = zeros(size(x));                    % 先分配y1和y2空间，避免运行中临时分配空间占用大量的运算量
 y2 = zeros(size(x));
 temp = 0;
-
+yfb = zeros(size(x));
 for i = 1:length(x)                     % 卷积形成反馈回路
     xs1 = [x(i)+temp; xs1(1:end-1)];    % 等待与c卷积的信号缓存
     y1(i) = K*(xs1'*c);                 % 馈给扬声器的信号
@@ -27,14 +27,33 @@ for i = 1:length(x)                     % 卷积形成反馈回路
     y1(i) = max(-1,y1(i));
     xs2 = [y1(i); xs2(1:end-1)];        % 等待与g卷积的信号缓存
     temp = xs2'*g;                      % temp作为单样点缓存，待下一采样点处理时与输入信号混合
+    yfb(i) = temp;
 end
 %audiowrite('timit_howling.wav',y1,fs);
 audiowrite('man_howling.wav',y1,fs);
-d  = fdesign.notch('N,F0,Q,Ap',2,922/(fs/2),1,1);   % 设计陷波器，中心频率为922Hz N - Filter Order (must be even),F0 - Center Frequency,Q - Quality Factor,Ap - Passband Ripple (decibels)
+figure
+subplot 311
+plot(x)
+legend('original')
+axis tight 
+subplot 312
+plot(y1)
+legend('ff')
+axis tight 
+subplot 313
+plot(yfb)
+legend('fb')
+axis tight 
+
+% 设计陷波器，中心频率为922Hz N - Filter Order (must be even),
+% F0 - Center Frequency,
+% Q - Quality Factor,Ap - Passband Ripple (decibels)
+d  = fdesign.notch('N,F0,Q,Ap',2,922/(fs/2),1,1);   
 Hd = design(d);
 iir_coef1 = Hd.sosMatrix;
 
-d  = fdesign.notch('N,F0,Q,Ap',2,4534/(fs/2),1,1);  % 设计陷波器，中心频率为4534Hz
+% 设计陷波器，中心频率为4534Hz
+d  = fdesign.notch('N,F0,Q,Ap',2,4534/(fs/2),1,1);  
 Hd = design(d);
 iir_coef2 = Hd.sosMatrix;
 
